@@ -90,25 +90,27 @@
   #minimapCanvas { position: fixed; top: 8px; right: 10px; width: 175px; height: 85px; background: rgba(10, 15, 28, 0.88); border: 1px solid rgba(56, 189, 248, 0.45); border-radius: 10px; z-index: 20; }
 
   /* 狀態提示 */
-  .status-banner { position: fixed; top: 52px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; z-index: 20; pointer-events: none; }
-  .buff-chip { background: rgba(15, 23, 42, 0.9); border: 1px solid #facc15; color: #fef08a; font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 99px; }
+  .status-banner { position: fixed; top: 52px; left: 50%; transform: translateX(-50%); display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; max-width: 72vw; z-index: 20; pointer-events: none; }
+  .buff-chip { background: rgba(15, 23, 42, 0.9); border: 1px solid #facc15; color: #fef08a; font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 99px; }
 
   /* 左下虛擬搖桿 */
   #joystick-zone { position: fixed; left: 18px; bottom: 18px; width: 130px; height: 130px; z-index: 25; }
   .joy-base { width: 116px; height: 116px; border-radius: 50%; background: rgba(255,255,255,0.08); border: 2px solid rgba(255,255,255,0.22); position: relative; }
   .joy-stick { width: 48px; height: 48px; border-radius: 50%; background: rgba(56, 189, 248, 0.75); border: 2px solid #fff; position: absolute; left: 32px; top: 32px; pointer-events: none; }
 
-  /* 右下 MOBA 技能輪盤 */
+  /* 右下 MOBA 技能輪盤（支援按住蓄力） */
   .skills-zone { position: fixed; right: 16px; bottom: 16px; width: 210px; height: 185px; z-index: 25; }
-  .skill-btn { position: absolute; border-radius: 50%; border: 2px solid rgba(255,255,255,0.45); background: rgba(15, 23, 42, 0.88); color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; font-weight: 800; cursor: pointer; box-shadow: 0 4px 14px rgba(0,0,0,0.6); }
-  .skill-btn:active { transform: scale(0.92); }
-  #btn-atk { right: 4px; bottom: 4px; width: 74px; height: 74px; background: radial-gradient(circle, #ef4444, #991b1b); border-color: #fca5a5; font-size: 16px; }
-  #btn-s1 { right: 88px; bottom: 12px; width: 58px; height: 58px; font-size: 12px; border-color: #38bdf8; }
-  #btn-s2 { right: 68px; bottom: 80px; width: 58px; height: 58px; font-size: 12px; border-color: #a855f7; }
-  #btn-ult { right: 6px; bottom: 92px; width: 64px; height: 64px; font-size: 12px; border-color: #64748b; }
+  .skill-btn { position: absolute; border-radius: 50%; border: 2px solid rgba(255,255,255,0.45); background: rgba(15, 23, 42, 0.88); color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; font-weight: 800; cursor: pointer; box-shadow: 0 4px 14px rgba(0,0,0,0.6); overflow: hidden; transition: transform 0.08s; }
+  .skill-btn.charging { transform: scale(1.08); border-color: #fde047 !important; box-shadow: 0 0 16px rgba(250, 204, 21, 0.85); }
+  #btn-atk { right: 4px; bottom: 4px; width: 74px; height: 74px; background: radial-gradient(circle, #ef4444, #991b1b); border-color: #fca5a5; font-size: 15px; }
+  #btn-s1 { right: 88px; bottom: 12px; width: 58px; height: 58px; font-size: 11px; border-color: #38bdf8; }
+  #btn-s2 { right: 68px; bottom: 80px; width: 58px; height: 58px; font-size: 11px; border-color: #a855f7; }
+  #btn-ult { right: 6px; bottom: 92px; width: 64px; height: 64px; font-size: 11px; border-color: #64748b; }
   #btn-ult.ready { background: radial-gradient(circle, #f59e0b, #b45309); border-color: #fde047; box-shadow: 0 0 18px rgba(250, 204, 21, 0.85); }
-  .cd-mask { position: absolute; inset: 0; border-radius: 50%; background: rgba(0,0,0,0.72); display: none; align-items: center; justify-content: center; font-size: 14px; color: #f8fafc; }
-  .skill-sub { font-size: 9px; color: #cbd5e1; margin-top: 1px; }
+  .charge-ring { position: absolute; left: 0; bottom: 0; width: 100%; height: 0%; background: rgba(250, 204, 21, 0.35); pointer-events: none; }
+  .cd-mask { position: absolute; inset: 0; border-radius: 50%; background: rgba(0,0,0,0.72); display: none; align-items: center; justify-content: center; font-size: 14px; color: #f8fafc; z-index: 2; }
+  .skill-sub { font-size: 9px; color: #cbd5e1; margin-top: 1px; z-index: 1; }
+  .skill-txt { z-index: 1; }
 
   /* 聊天室（左上可展開） */
   .chat-widget { position: fixed; top: 8px; left: 10px; width: 230px; z-index: 30; }
@@ -122,7 +124,7 @@
   .chat-input { flex: 1; background: #0f172a; border: 1px solid #64748b; border-radius: 6px; color: #fff; padding: 4px 6px; font-size: 12px; touch-action: auto; user-select: text; -webkit-user-select: text; }
   .btn-send-chat { background: #38bdf8; color: #0f172a; border: none; border-radius: 6px; padding: 4px 8px; font-weight: 800; font-size: 11px; cursor: pointer; }
 
-  /* 外掛面板（5次YEE觸發，按鈕分頁，嚴禁滑動） */
+  /* 外掛面板（5次YEE解鎖，按鈕分頁無滑動） */
   #cheat-panel { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 92%; max-width: 560px; background: rgba(9, 13, 24, 0.96); border: 2px solid #f43f5e; border-radius: 16px; padding: 12px; z-index: 150; display: none; flex-direction: column; gap: 10px; box-shadow: 0 0 40px rgba(244, 63, 94, 0.55); }
   #cheat-panel.open { display: flex; }
   .cheat-head { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155; padding-bottom: 6px; }
@@ -168,7 +170,7 @@
     <button class="btn-rename" onclick="openRenameModal()">改名</button>
   </div>
   <div class="game-main-title">↗️ 30° 單線 15v15 死鬥場</div>
-  <div class="game-sub-title">700m × 150m 斜向走廊 ｜ 無防禦塔 ｜ 10分鐘 / 500殺勝利</div>
+  <div class="game-sub-title">700m × 150m 斜向走廊 ｜ 無防禦塔 ｜ 10分鐘 / 500殺勝利 ｜ 全技能可按住蓄力</div>
   <div class="home-btn-group">
     <button class="big-home-btn btn-create" onclick="createRoom()">
       創建房間
@@ -205,7 +207,7 @@
   </div>
 </div>
 
-<!-- 3. 房間分隊大廳 -->
+<!-- 3. 房間分隊畫面 -->
 <div id="room-screen" class="screen">
   <div class="room-header">
     <div class="room-code-tag">房間代碼：<span id="room-code-display">----</span></div>
@@ -231,7 +233,7 @@
 <!-- 4. 30秒選角畫面 -->
 <div id="select-screen" class="screen">
   <div class="select-header">
-    <div style="font-size:18px;font-weight:900;">選擇出戰職業</div>
+    <div style="font-size:18px;font-weight:900;">選擇出戰職業（所有技能皆可按住蓄力強化）</div>
     <div id="select-timer" class="timer-pill">30s</div>
   </div>
   <div id="hero-grid" class="hero-grid"></div>
@@ -250,7 +252,7 @@
     <span class="score-red" id="hud-red-kills">0</span>
   </div>
 
-  <!-- 狀態與變體提示條 -->
+  <!-- 狀態與蓄力提示條 -->
   <div id="status-banner" class="status-banner"></div>
 
   <!-- 左上聊天室 -->
@@ -274,12 +276,37 @@
     </div>
   </div>
 
-  <!-- 右下 MOBA 技能輪盤 -->
+  <!-- 右下 MOBA 技能輪盤（按住蓄力，放開施放） -->
   <div class="skills-zone">
-    <button id="btn-atk" class="skill-btn" onpointerdown="useAttack()">普攻<span class="skill-sub" id="lbl-atk">攻擊</span></button>
-    <button id="btn-s1" class="skill-btn" onpointerdown="useSkill1()">1技能<span class="skill-sub" id="lbl-s1">技能1</span><div id="cd-s1" class="cd-mask"></div></button>
-    <button id="btn-s2" class="skill-btn" onpointerdown="useSkill2()">2技能<span class="skill-sub" id="lbl-s2">技能2</span><div id="cd-s2" class="cd-mask"></div></button>
-    <button id="btn-ult" class="skill-btn" onpointerdown="useUlt()">大招<span class="skill-sub" id="lbl-ult">0%</span></button>
+    <button id="btn-atk" class="skill-btn"
+      onpointerdown="startHold('atk', event)" onpointerup="releaseHold('atk', event)" onpointercancel="cancelHold('atk')">
+      <div id="chg-atk" class="charge-ring"></div>
+      <span class="skill-txt">普攻</span>
+      <span class="skill-sub" id="lbl-atk">按住蓄力</span>
+    </button>
+
+    <button id="btn-s1" class="skill-btn"
+      onpointerdown="startHold('s1', event)" onpointerup="releaseHold('s1', event)" onpointercancel="cancelHold('s1')">
+      <div id="chg-s1" class="charge-ring"></div>
+      <span class="skill-txt">1技能</span>
+      <span class="skill-sub" id="lbl-s1">技能1</span>
+      <div id="cd-s1" class="cd-mask"></div>
+    </button>
+
+    <button id="btn-s2" class="skill-btn"
+      onpointerdown="startHold('s2', event)" onpointerup="releaseHold('s2', event)" onpointercancel="cancelHold('s2')">
+      <div id="chg-s2" class="charge-ring"></div>
+      <span class="skill-txt">2技能</span>
+      <span class="skill-sub" id="lbl-s2">技能2</span>
+      <div id="cd-s2" class="cd-mask"></div>
+    </button>
+
+    <button id="btn-ult" class="skill-btn"
+      onpointerdown="startHold('ult', event)" onpointerup="releaseHold('ult', event)" onpointercancel="cancelHold('ult')">
+      <div id="chg-ult" class="charge-ring"></div>
+      <span class="skill-txt">大招</span>
+      <span class="skill-sub" id="lbl-ult">0%</span>
+    </button>
   </div>
 </div>
 
@@ -364,32 +391,32 @@ const HEROES = {
   warrior: {
     id: "warrior", name: "戰士", hp: 50000, atk: 5000, speed: 34, range: 6, color: "#f59e0b",
     s1Name: "衝刺抓人", s1Cd: 7, s2Name: "舉盾80%減傷", s2Cd: 8, ultName: "戰意解控",
-    desc: "50,000 HP｜1技衝刺12m抓人｜2技舉盾80%減傷｜大招解控+免控15秒+回25%已損血"
+    desc: "50,000 HP｜全技能可按住蓄力｜1技衝刺12m抓人｜2技舉盾80%減傷｜大招解控+免控15秒+回25%已損血"
   },
   assassin: {
     id: "assassin", name: "刺客", hp: 40000, atk: 6000, speed: 47.6, range: 5.5, color: "#a855f7",
     s1Name: "隱身/遁地", s1Cd: 7, s2Name: "領域疊層", s2Cd: 8, ultName: "-80%冷卻",
-    desc: "40,000 HP｜強普50%吸血/背刺+50%暴擊/擊殺刷新｜1技1s隱身→1s內再按遁地→1s內按2技突擊｜2技圓內敵數×3(上限20)｜大招10s減80%CD"
+    desc: "40,000 HP｜全技能可按住蓄力｜強普50%吸血/背刺+50%暴擊/擊殺刷新｜1技1s隱身→1s內再按遁地→1s內按2技突擊｜2技圓內敵數×3(上限20)｜大招10s減80%CD"
   },
   tank: {
     id: "tank", name: "坦克", hp: 75000, atk: 4000, speed: 30, range: 6, color: "#3b82f6",
     s1Name: "槌地擊飛", s1Cd: 7, s2Name: "盾吸/抓摔", s2Cd: 9, ultName: "眾防聯邦",
-    desc: "75,000 HP｜1技槌地擊飛(打遁地額外控傷/抓人時雙倍)｜2技遠程免疫+10%回血/近戰抓5s(每0.2s砸5次)｜大招眾防聯邦"
+    desc: "75,000 HP｜全技能可按住蓄力｜1技槌地擊飛(打遁地額外控傷/抓人時雙倍)｜2技遠程免疫+10%回血/近戰抓5s(每0.2s砸5次)｜大招眾防聯邦"
   },
   mage: {
     id: "mage", name: "法師", hp: 40000, atk: 4500, speed: 33, range: 20, color: "#ec4899",
     s1Name: "奧術轟炸", s1Cd: 6, s2Name: "元素衝擊", s2Cd: 7, ultName: "5s毀滅詠唱",
-    desc: "40,000 HP｜遠程高爆發控場｜大招站樁詠唱5秒降下超巨型毀滅光柱（可被硬控打斷）"
+    desc: "40,000 HP｜全技能可按住蓄力｜遠程高爆發控場｜大招詠唱降下超巨型毀滅光柱（可被硬控打斷）"
   },
   archer: {
     id: "archer", name: "射手", hp: 40000, atk: 5500, speed: 34, range: 24, color: "#10b981",
-    s1Name: "防守哨兵", s1Cd: 8, s2Name: "5s蓄力狙", s2Cd: 9, ultName: "友軍助我",
-    desc: "40,000 HP｜站立5s架槍(視野射程+50%)｜1技警戒哨兵｜2技蓄力5s高傷狙擊｜大招召喚6人小隊"
+    s1Name: "防守哨兵", s1Cd: 8, s2Name: "蓄力狙擊", s2Cd: 9, ultName: "友軍助我",
+    desc: "40,000 HP｜全技能可按住蓄力｜站立5s架槍(視野射程+50%)｜1技警戒哨兵｜2技按住蓄力狙擊｜大招召喚6人小隊"
   },
   support: {
     id: "support", name: "輔助", hp: 50000, atk: 3500, speed: 35, range: 16, color: "#38bdf8",
     s1Name: "我打宿儺？", s1Cd: 6, s2Name: "呀西呀雷", s2Cd: 7, ultName: "不然呢(25m)",
-    desc: "50,000 HP｜1技隊友每秒+500回血｜2技範圍2秒禁錮｜大招半徑25m雙色領域(友+30%速/敵-30%速)"
+    desc: "50,000 HP｜全技能可按住蓄力｜1技隊友每秒+500回血｜2技範圍2秒禁錮｜大招半徑25m雙色領域(友+30%速/敵-30%速)"
   }
 };
 
@@ -400,7 +427,7 @@ window.addEventListener("load", () => {
   const tip = document.getElementById("load-tip");
   const tips = [
     "正在構建 700m × 150m 往右上 ↗️ 傾斜 30° 單線戰場...",
-    "正在校準六大職業與能量蓄能系統...",
+    "正在校準六大職業、蓄力機制與能量蓄能系統...",
     "正在初始化手遊雙搖桿與 MOBA 技能輪盤...",
     "載入完成！"
   ];
@@ -543,13 +570,12 @@ const ctx = canvas.getContext("2d");
 const miniCanvas = document.getElementById("minimapCanvas");
 const miniCtx = miniCanvas.getContext("2d");
 
-// 世界座標系：局部戰場沿 X 軸 0~700m, Y 軸 -75~+75m (總寬150m)，渲染時逆時針旋轉 30°（往右上 ↗️ 斜）
 const ARENA_LEN = 700;
 const ARENA_HALF_W = 75;
 const TILT_RAD = -Math.PI / 6; // -30度 => 往右上 ↗️ 傾斜
 
 let gameRunning = false;
-let matchTime = 600; // 10分鐘
+let matchTime = 600;
 let blueKills = 0;
 let redKills = 0;
 let units = [];
@@ -560,6 +586,15 @@ let fields = [];
 let floatTexts = [];
 let playerUnit = null;
 let lastFrameTime = 0;
+
+// 全技能按住蓄力狀態（最多蓄力 1.6 秒滿 100%，倍率 1.0 ~ 2.0）
+const HOLD_MAX_SEC = 1.6;
+const holdState = {
+  atk: { active: false, pointerId: null, elapsed: 0 },
+  s1:  { active: false, pointerId: null, elapsed: 0 },
+  s2:  { active: false, pointerId: null, elapsed: 0 },
+  ult: { active: false, pointerId: null, elapsed: 0 }
+};
 
 // 外掛狀態
 const cheats = {
@@ -581,6 +616,7 @@ function startBattle() {
   wards = [];
   fields = [];
   floatTexts = [];
+  Object.keys(holdState).forEach(k => { holdState[k].active = false; holdState[k].elapsed = 0; });
 
   const heroKeys = Object.keys(HEROES);
   for (let i = 0; i < 30; i++) {
@@ -594,7 +630,7 @@ function startBattle() {
   }
 
   updateSkillLabels();
-  addChatMsg("系統", "戰場開啟！往右上 ↗️ 30° 單線死鬥，目標 500 擊殺！", "#38bdf8");
+  addChatMsg("系統", "戰場開啟！往右上 ↗️ 30° 單線死鬥，全技能按住蓄力放開施放！", "#38bdf8");
   gameRunning = true;
   lastFrameTime = performance.now();
   requestAnimationFrame(gameLoop);
@@ -615,29 +651,24 @@ function createUnit(id, name, team, heroId, isMe, isSummon) {
     color: h.color,
     dead: false, respawnTimer: 0,
     s1Cd: 0, s2Cd: 0,
-    ultCharge: 0, // 0 ~ 100 能量蓄能
-    // 狀態計時器
+    ultCharge: 0,
     stunTimer: 0,
     immuneTimer: 0,
-    shieldTimer: 0, // 戰士舉盾 80% 減傷
-    stealthTimer: 0, // 刺客隱身
-    burrowTimer: 0,  // 刺客遁地
-    s1Stage: 0,      // 刺客1技階段: 0閒置, 1按下等待1s隱身, 2已隱身等待1s內變體
+    shieldTimer: 0,
+    stealthTimer: 0,
+    burrowTimer: 0,
+    s1Stage: 0,
     s1WindowTimer: 0,
-    assassinStacks: 0, // 刺客被動層數 (上限20)
-    empAtk: false,     // 刺客強化普攻
-    ultBuffTimer: 0,   // 刺客大招10s減80%CD
-    // 坦克抓摔
+    assassinStacks: 0,
+    empAtk: false,
+    ultBuffTimer: 0,
     rangedImmuneTimer: 0,
     grabTargetId: null,
     grabTimer: 0,
     smashCount: 0,
     smashCd: 0,
-    // 射手架槍與狙擊蓄力
     standStillTime: 0,
     turretMode: false,
-    snipeChargeTimer: 0,
-    // 法師詠唱
     channelUltTimer: 0
   };
 }
@@ -679,7 +710,6 @@ function updateJoy(e) {
   const dist = Math.hypot(dx, dy);
   if (dist > maxR) { dx = (dx / dist) * maxR; dy = (dy / dist) * maxR; }
   joyStick.style.transform = `translate(${dx}px, ${dy}px)`;
-  // 將螢幕操作向量逆旋轉 +30° 對齊戰場座標軸，讓往右上拉搖桿就是沿斜向走廊前進
   const sx = dx / maxR;
   const sy = dy / maxR;
   const cos = Math.cos(-TILT_RAD);
@@ -688,19 +718,67 @@ function updateJoy(e) {
   joyVec.y = sx * sin + sy * cos;
 }
 
-// 電腦測試鍵盤支援
-const keysDown = {};
+// 觸控與鍵盤「按住蓄力 -> 放開施放」
+function startHold(slotKey, e) {
+  if (!playerUnit || playerUnit.dead || playerUnit.stunTimer > 0) return;
+  if (slotKey === "s1" && playerUnit.s1Cd > 0 && playerUnit.s1Stage === 0) return;
+  if (slotKey === "s2" && playerUnit.s2Cd > 0 && playerUnit.grabTargetId === null && !(playerUnit.heroId === "assassin" && playerUnit.s1Stage > 0)) return;
+  if (slotKey === "ult" && playerUnit.ultCharge < 100) return;
+
+  const st = holdState[slotKey];
+  if (st.active) return;
+  st.active = true;
+  st.pointerId = e ? e.pointerId : "kbd";
+  st.elapsed = 0;
+  if (e && e.currentTarget && e.pointerId !== undefined) {
+    try { e.currentTarget.setPointerCapture(e.pointerId); } catch (_) {}
+  }
+  document.getElementById("btn-" + slotKey).classList.add("charging");
+}
+
+function releaseHold(slotKey, e) {
+  const st = holdState[slotKey];
+  if (!st.active) return;
+  if (e && st.pointerId !== "kbd" && e.pointerId !== st.pointerId) return;
+  const ratio = Math.min(1, st.elapsed / HOLD_MAX_SEC); // 0 ~ 1
+  const chargeMult = 1 + ratio; // 1.0x ~ 2.0x 蓄力強化倍率
+  st.active = false;
+  st.pointerId = null;
+  st.elapsed = 0;
+  document.getElementById("btn-" + slotKey).classList.remove("charging");
+  document.getElementById("chg-" + slotKey).style.height = "0%";
+
+  if (slotKey === "atk") useAttack(playerUnit, chargeMult);
+  else if (slotKey === "s1") useSkill1(playerUnit, chargeMult);
+  else if (slotKey === "s2") useSkill2(playerUnit, chargeMult);
+  else if (slotKey === "ult") useUlt(playerUnit, chargeMult);
+}
+
+function cancelHold(slotKey) {
+  const st = holdState[slotKey];
+  st.active = false;
+  st.pointerId = null;
+  st.elapsed = 0;
+  document.getElementById("btn-" + slotKey).classList.remove("charging");
+  document.getElementById("chg-" + slotKey).style.height = "0%";
+}
+
+const keySlotMap = { "j": "atk", " ": "atk", "k": "s1", "1": "s1", "l": "s2", "2": "s2", "u": "ult", "3": "ult" };
 window.addEventListener("keydown", e => {
   if (document.activeElement.tagName === "INPUT") return;
-  keysDown[e.key.toLowerCase()] = true;
-  if (e.key === "j" || e.key === " ") useAttack();
-  if (e.key === "k" || e.key === "1") useSkill1();
-  if (e.key === "l" || e.key === "2") useSkill2();
-  if (e.key === "u" || e.key === "3") useUlt();
+  const k = e.key.toLowerCase();
+  keysDown[k] = true;
+  const slotKey = keySlotMap[k];
+  if (slotKey && !e.repeat) startHold(slotKey, { pointerId: "kbd" });
 });
-window.addEventListener("keyup", e => { keysDown[e.key.toLowerCase()] = false; });
+window.addEventListener("keyup", e => {
+  const k = e.key.toLowerCase();
+  keysDown[k] = false;
+  const slotKey = keySlotMap[k];
+  if (slotKey) releaseHold(slotKey, { pointerId: "kbd" });
+});
 
-// ==================== 技能與普攻施放邏輯 ====================
+// ==================== 技能與普攻施放邏輯（支援蓄力倍率 chargeMult） ====================
 function updateSkillLabels() {
   if (!playerUnit) return;
   const h = HEROES[playerUnit.heroId];
@@ -718,7 +796,7 @@ function gainUltCharge(u, amount) {
 function getCdMult(u) {
   if (u.isMe && cheats.nocd) return 0;
   let m = 1;
-  if (u.heroId === "assassin" && u.ultBuffTimer > 0) m *= 0.2; // 減少80%冷卻
+  if (u.heroId === "assassin" && u.ultBuffTimer > 0) m *= 0.2;
   return m;
 }
 
@@ -726,7 +804,6 @@ function findNearestEnemy(u, maxR) {
   let best = null, bestD = maxR;
   for (const e of units) {
     if (e.dead || e.team === u.team) continue;
-    // 被坦克抓著的目標，隊友不可攻擊
     if (e.grabbedBy && e.grabbedBy !== u.id) continue;
     if (e.stealthTimer > 0 && !u.isMe) continue;
     const d = Math.hypot(e.x - u.x, e.y - u.y);
@@ -740,7 +817,6 @@ function dealDamage(attacker, target, rawDmg, isRanged = false, isBackstab = fal
   if (target.isMe && cheats.god) return;
   if (target.grabbedBy && attacker && target.grabbedBy !== attacker.id) return;
 
-  // 坦克 2 技能遠程免疫 + 10% 回血
   if (isRanged && target.rangedImmuneTimer > 0) {
     const heal = Math.round(rawDmg * 0.1);
     target.hp = Math.min(target.maxHp, target.hp + heal);
@@ -750,15 +826,12 @@ function dealDamage(attacker, target, rawDmg, isRanged = false, isBackstab = fal
 
   let dmg = rawDmg;
   if (attacker && attacker.isMe && cheats.onehit) dmg = 999999;
-
-  // 戰士舉盾 80% 減傷
   if (target.shieldTimer > 0) dmg *= 0.2;
 
   dmg = Math.round(dmg);
   target.hp -= dmg;
   target.stealthTimer = 0;
 
-  // 吸血效果（刺客強普 50% 吸血 或 外掛）
   if (attacker) {
     gainUltCharge(attacker, 6);
     if (attacker._currentLifesteal > 0) {
@@ -779,7 +852,7 @@ function dealDamage(attacker, target, rawDmg, isRanged = false, isBackstab = fal
 function killUnit(killer, victim) {
   if (victim.dead) return;
   victim.dead = true;
-  victim.respawnTimer = 3.0; // 3秒復活
+  victim.respawnTimer = 3.0;
   victim.grabTargetId = null;
   victim.grabbedBy = null;
   victim.channelUltTimer = 0;
@@ -790,7 +863,6 @@ function killUnit(killer, victim) {
 
   if (killer) {
     gainUltCharge(killer, 25);
-    // 刺客被動：參與擊殺刷新全技能冷卻
     if (killer.heroId === "assassin") {
       killer.s1Cd = 0;
       killer.s2Cd = 0;
@@ -803,32 +875,30 @@ function killUnit(killer, victim) {
   }
 }
 
-// 普攻
-function useAttack(u = playerUnit) {
+// 普攻（支援蓄力倍率 1.0 ~ 2.0）
+function useAttack(u = playerUnit, chargeMult = 1.0) {
   if (!u || u.dead || u.stunTimer > 0) return;
   const mult = (u.heroId === "archer" && u.turretMode) ? 1.5 : 1.0;
-  const effRange = u.range * mult;
+  const effRange = u.range * mult * (0.85 + 0.15 * chargeMult);
   const target = findNearestEnemy(u, effRange);
   if (target) u.facing = Math.atan2(target.y - u.y, target.x - u.x);
 
-  // 取消射手架槍
   if (u.heroId === "archer") { u.standStillTime = 0; u.turretMode = false; }
 
+  const totalAtk = u.atk * chargeMult;
   if (u.range <= 8) {
-    // 近戰揮砍
     spawnEffect("slash", u.x, u.y, effRange, u.facing, u.color, 0.22);
     if (target) {
-      let dmg = u.atk;
+      let dmg = totalAtk;
       let isBack = false;
       u._currentLifesteal = (u.isMe && cheats.lifesteal) ? 1.0 : 0;
 
-      // 刺客被動：背後 +50% 暴擊 + 強化普攻 50% 吸血 + 層數加成
       if (u.heroId === "assassin") {
         const angleDiff = Math.abs(Math.atan2(Math.sin(u.facing - target.facing), Math.cos(u.facing - target.facing)));
         if (angleDiff < Math.PI / 2.2) { dmg *= 1.5; isBack = true; }
         if (u.empAtk) {
           dmg *= (1.35 + u.assassinStacks * 0.03);
-          u._currentLifesteal = Math.max(u._currentLifesteal, 0.5); // 強普回復造成傷害50%
+          u._currentLifesteal = Math.max(u._currentLifesteal, 0.5);
           u.empAtk = false;
           spawnEffect("ring", target.x, target.y, 5, 0, "#e879f9", 0.3);
         }
@@ -837,112 +907,110 @@ function useAttack(u = playerUnit) {
       u._currentLifesteal = 0;
     }
   } else {
-    // 遠程彈道
     projectiles.push({
-      x: u.x, y: u.y, vx: Math.cos(u.facing) * 95, vy: Math.sin(u.facing) * 95,
-      team: u.team, owner: u, dmg: u.atk, life: effRange / 95, color: u.color, radius: 1.5
+      x: u.x, y: u.y,
+      vx: Math.cos(u.facing) * (95 * (0.9 + 0.1 * chargeMult)),
+      vy: Math.sin(u.facing) * (95 * (0.9 + 0.1 * chargeMult)),
+      team: u.team, owner: u, dmg: totalAtk,
+      life: effRange / 95, color: u.color, radius: 1.5 * Math.sqrt(chargeMult)
     });
   }
 }
 
-// 1 技能
-function useSkill1(u = playerUnit) {
+// 1 技能（支援蓄力倍率 1.0 ~ 2.0）
+function useSkill1(u = playerUnit, chargeMult = 1.0) {
   if (!u || u.dead || u.stunTimer > 0) return;
 
-  // 刺客 1 技能特殊三段變體：按一下1秒後隱身，1秒內再按一次遁地
   if (u.heroId === "assassin") {
     if (u.s1Stage === 2 && u.s1WindowTimer > 0) {
-      // 第二段變體：遁地！
       u.s1Stage = 0;
       u.s1WindowTimer = 0;
       u.stealthTimer = 0;
-      u.burrowTimer = 3.0;
+      u.burrowTimer = 3.0 * chargeMult;
       u.empAtk = true;
       u.s1Cd = HEROES.assassin.s1Cd * getCdMult(u);
-      spawnEffect("ring", u.x, u.y, 5, 0, "#7e22ce", 0.35);
-      if (u.isMe) spawnFloatText(u.x, u.y - 10, "變體：遁地潛行!", "#d8b4fe");
+      spawnEffect("ring", u.x, u.y, 5 * chargeMult, 0, "#7e22ce", 0.35);
+      if (u.isMe) spawnFloatText(u.x, u.y - 10, `變體：遁地潛行 (${chargeMult.toFixed(1)}x)!`, "#d8b4fe");
       return;
     }
     if (u.s1Cd > 0) return;
     u.s1Stage = 1;
-    u.s1WindowTimer = 1.0; // 1秒後隱身
+    u.s1WindowTimer = 1.0;
     u.empAtk = true;
     u.s1Cd = HEROES.assassin.s1Cd * getCdMult(u);
-    if (u.isMe) spawnFloatText(u.x, u.y - 10, "1秒後進入隱身...", "#c084fc");
+    if (u.isMe) spawnFloatText(u.x, u.y - 10, `1秒後隱身 (蓄力${chargeMult.toFixed(1)}x)`, "#c084fc");
     return;
   }
 
   if (u.s1Cd > 0) return;
   u.s1Cd = HEROES[u.heroId].s1Cd * getCdMult(u);
-  gainUltCharge(u, 10);
+  gainUltCharge(u, 10 * chargeMult);
 
   if (u.heroId === "warrior") {
-    // 戰士 1 技：先衝刺 12 公尺再抓人
-    const dashDist = 12;
+    const dashDist = 12 * chargeMult;
     u.x = Math.max(5, Math.min(ARENA_LEN - 5, u.x + Math.cos(u.facing) * dashDist));
     u.y = Math.max(-ARENA_HALF_W + 5, Math.min(ARENA_HALF_W - 5, u.y + Math.sin(u.facing) * dashDist));
     spawnEffect("dash", u.x, u.y, dashDist, u.facing, "#f59e0b", 0.3);
-    const t = findNearestEnemy(u, 7);
+    const t = findNearestEnemy(u, 7 * chargeMult);
     if (t) {
       t.x = u.x + Math.cos(u.facing) * 3;
       t.y = u.y + Math.sin(u.facing) * 3;
-      if (t.immuneTimer <= 0) t.stunTimer = 1.3;
-      dealDamage(u, t, 7500, false, false);
-      spawnEffect("ring", t.x, t.y, 5, 0, "#fbbf24", 0.35);
+      if (t.immuneTimer <= 0) t.stunTimer = 1.3 * chargeMult;
+      dealDamage(u, t, 7500 * chargeMult, false, false);
+      spawnEffect("ring", t.x, t.y, 5 * chargeMult, 0, "#fbbf24", 0.35);
     }
   } else if (u.heroId === "tank") {
-    // 坦克 1 技：槌地板擊飛，遁地額外控制加傷，手上有敵人時控制與距離雙倍
     const hasGrab = u.grabTargetId !== null;
-    const rad = hasGrab ? 16 : 8;
+    const rad = (hasGrab ? 16 : 8) * (0.85 + 0.15 * chargeMult);
     spawnEffect("ring", u.x, u.y, rad, 0, "#3b82f6", 0.4);
     for (const e of units) {
       if (e.dead || e.team === u.team) continue;
       if (Math.hypot(e.x - u.x, e.y - u.y) <= rad) {
         const isBurrowed = e.burrowTimer > 0;
-        if (isBurrowed) e.burrowTimer = 0; // 震出遁地
-        const stunDur = (hasGrab ? 2.4 : 1.2) + (isBurrowed ? 1.2 : 0);
+        if (isBurrowed) e.burrowTimer = 0;
+        const stunDur = ((hasGrab ? 2.4 : 1.2) + (isBurrowed ? 1.2 : 0)) * chargeMult;
         if (e.immuneTimer <= 0) e.stunTimer = Math.max(e.stunTimer, stunDur);
-        dealDamage(u, e, isBurrowed ? 9500 : 6000, false, false);
+        dealDamage(u, e, (isBurrowed ? 9500 : 6000) * chargeMult, false, false);
       }
     }
   } else if (u.heroId === "mage") {
-    const t = findNearestEnemy(u, 26);
-    const tx = t ? t.x : u.x + Math.cos(u.facing) * 18;
-    const ty = t ? t.y : u.y + Math.sin(u.facing) * 18;
-    spawnEffect("ring", tx, ty, 7, 0, "#ec4899", 0.45);
+    const t = findNearestEnemy(u, 26 * chargeMult);
+    const tx = t ? t.x : u.x + Math.cos(u.facing) * 18 * chargeMult;
+    const ty = t ? t.y : u.y + Math.sin(u.facing) * 18 * chargeMult;
+    const rad = 7 * chargeMult;
+    spawnEffect("ring", tx, ty, rad, 0, "#ec4899", 0.45);
     for (const e of units) {
-      if (!e.dead && e.team !== u.team && Math.hypot(e.x - tx, e.y - ty) <= 7) {
-        dealDamage(u, e, 8500, true, false);
+      if (!e.dead && e.team !== u.team && Math.hypot(e.x - tx, e.y - ty) <= rad) {
+        dealDamage(u, e, 8500 * chargeMult, true, false);
       }
     }
   } else if (u.heroId === "archer") {
-    const mult = u.turretMode ? 1.5 : 1.0;
+    const mult = (u.turretMode ? 1.5 : 1.0) * chargeMult;
     const wx = u.x + Math.cos(u.facing) * 12 * mult;
     const wy = u.y + Math.sin(u.facing) * 12 * mult;
-    wards.push({ x: wx, y: wy, team: u.team, life: 20, radius: 14 * mult });
+    wards.push({ x: wx, y: wy, team: u.team, life: 20 * chargeMult, radius: 14 * mult });
     spawnEffect("ring", wx, wy, 14 * mult, 0, "#10b981", 0.4);
   } else if (u.heroId === "support") {
-    // 我打宿儺？範圍治療
     const t = units.find(a => !a.dead && a.team === u.team && Math.hypot(a.x - u.x, a.y - u.y) <= 16) || u;
-    fields.push({ x: t.x, y: t.y, team: u.team, radius: 5, life: 4, type: "heal" });
-    spawnEffect("ring", t.x, t.y, 5, 0, "#34d399", 0.5);
+    const rad = 5 * chargeMult;
+    fields.push({ x: t.x, y: t.y, team: u.team, radius: rad, life: 4 * chargeMult, type: "heal" });
+    spawnEffect("ring", t.x, t.y, rad, 0, "#34d399", 0.5);
   }
 }
 
-// 2 技能
-function useSkill2(u = playerUnit) {
+// 2 技能（支援蓄力倍率 1.0 ~ 2.0）
+function useSkill2(u = playerUnit, chargeMult = 1.0) {
   if (!u || u.dead || u.stunTimer > 0) return;
 
-  // 坦克抓取中再次按 2 技能：每 0.2 秒砸一次地板，砸 5 次後放開
   if (u.heroId === "tank" && u.grabTargetId !== null) {
     if (u.smashCd <= 0) {
       u.smashCd = 0.2;
       u.smashCount++;
       const victim = units.find(x => x.id === u.grabTargetId);
       if (victim && !victim.dead) {
-        spawnEffect("ring", u.x, u.y, 6, 0, "#60a5fa", 0.25);
+        spawnEffect("ring", u.x, u.y, 6 * chargeMult, 0, "#60a5fa", 0.25);
         victim.grabbedBy = null;
-        dealDamage(u, victim, 3200, false, false);
+        dealDamage(u, victim, 3200 * chargeMult, false, false);
         victim.grabbedBy = u.id;
         if (u.smashCount >= 5) {
           victim.grabbedBy = null;
@@ -955,36 +1023,33 @@ function useSkill2(u = playerUnit) {
     return;
   }
 
-  // 刺客 1 技能連攜變體：1秒內按 2 技能往前突擊 + 創造圓形領域疊被動
   if (u.heroId === "assassin" && (u.s1Stage === 1 || u.s1Stage === 2) && u.s1WindowTimer > 0) {
     u.s1Stage = 0;
     u.s1WindowTimer = 0;
     u.stealthTimer = 0;
     u.burrowTimer = 0;
     u.empAtk = true;
-    const dashDist = 14;
+    const dashDist = 14 * chargeMult;
     u.x = Math.max(5, Math.min(ARENA_LEN - 5, u.x + Math.cos(u.facing) * dashDist));
     u.y = Math.max(-ARENA_HALF_W + 5, Math.min(ARENA_HALF_W - 5, u.y + Math.sin(u.facing) * dashDist));
     spawnEffect("dash", u.x, u.y, dashDist, u.facing, "#e879f9", 0.35);
-    triggerAssassinCircle(u);
+    triggerAssassinCircle(u, chargeMult);
     u.s2Cd = HEROES.assassin.s2Cd * getCdMult(u);
     return;
   }
 
   if (u.s2Cd > 0) return;
   u.s2Cd = HEROES[u.heroId].s2Cd * getCdMult(u);
-  gainUltCharge(u, 12);
+  gainUltCharge(u, 12 * chargeMult);
 
   if (u.heroId === "warrior") {
-    // 戰士 2 技：舉盾防禦 80% 減傷
-    u.shieldTimer = 4.0;
-    spawnEffect("ring", u.x, u.y, 5, 0, "#fbbf24", 0.4);
+    u.shieldTimer = 4.0 * chargeMult;
+    spawnEffect("ring", u.x, u.y, 5 * chargeMult, 0, "#fbbf24", 0.4);
   } else if (u.heroId === "assassin") {
-    triggerAssassinCircle(u);
+    triggerAssassinCircle(u, chargeMult);
   } else if (u.heroId === "tank") {
-    // 遠程免疫 + 10% 傷害回血，近戰抓人 5 秒
-    u.rangedImmuneTimer = 4.0;
-    const nearEnemy = findNearestEnemy(u, 6.5);
+    u.rangedImmuneTimer = 4.0 * chargeMult;
+    const nearEnemy = findNearestEnemy(u, 6.5 * chargeMult);
     if (nearEnemy && nearEnemy.immuneTimer <= 0) {
       u.grabTargetId = nearEnemy.id;
       u.grabTimer = 5.0;
@@ -993,46 +1058,45 @@ function useSkill2(u = playerUnit) {
       nearEnemy.stunTimer = 5.0;
       spawnFloatText(u.x, u.y - 12, "近戰抓取! 連點2技砸地!", "#60a5fa");
     } else {
-      spawnEffect("ring", u.x, u.y, 5.5, 0, "#38bdf8", 0.4);
+      spawnEffect("ring", u.x, u.y, 5.5 * chargeMult, 0, "#38bdf8", 0.4);
     }
   } else if (u.heroId === "mage") {
-    const t = findNearestEnemy(u, 18);
+    const t = findNearestEnemy(u, 18 * chargeMult);
     if (t) {
-      if (t.immuneTimer <= 0) t.stunTimer = 1.2;
-      dealDamage(u, t, 7000, true, false);
-      spawnEffect("ring", t.x, t.y, 5, 0, "#f472b6", 0.35);
+      if (t.immuneTimer <= 0) t.stunTimer = 1.2 * chargeMult;
+      dealDamage(u, t, 7000 * chargeMult, true, false);
+      spawnEffect("ring", t.x, t.y, 5 * chargeMult, 0, "#f472b6", 0.35);
     }
   } else if (u.heroId === "archer") {
-    // 精準狙擊
-    const mult = u.turretMode ? 1.5 : 1.0;
-    const snipeDmg = u.turretMode ? 16000 : 10500;
+    const mult = (u.turretMode ? 1.5 : 1.0) * chargeMult;
+    const snipeDmg = (u.turretMode ? 16000 : 10500) * chargeMult;
     projectiles.push({
       x: u.x, y: u.y, vx: Math.cos(u.facing) * 150, vy: Math.sin(u.facing) * 150,
-      team: u.team, owner: u, dmg: snipeDmg, life: (48 * mult) / 150, color: "#34d399", radius: 2.2
+      team: u.team, owner: u, dmg: snipeDmg, life: (48 * mult) / 150, color: "#34d399", radius: 2.2 * Math.sqrt(chargeMult)
     });
   } else if (u.heroId === "support") {
-    // 呀西呀雷：2秒定身
-    const t = findNearestEnemy(u, 18);
-    const tx = t ? t.x : u.x + Math.cos(u.facing) * 14;
-    const ty = t ? t.y : u.y + Math.sin(u.facing) * 14;
-    spawnEffect("ring", tx, ty, 5, 0, "#a855f7", 0.45);
+    const t = findNearestEnemy(u, 18 * chargeMult);
+    const tx = t ? t.x : u.x + Math.cos(u.facing) * 14 * chargeMult;
+    const ty = t ? t.y : u.y + Math.sin(u.facing) * 14 * chargeMult;
+    const rad = 5 * chargeMult;
+    spawnEffect("ring", tx, ty, rad, 0, "#a855f7", 0.45);
     for (const e of units) {
-      if (!e.dead && e.team !== u.team && Math.hypot(e.x - tx, e.y - ty) <= 5) {
-        if (e.immuneTimer <= 0) e.stunTimer = 2.0;
-        dealDamage(u, e, 4000, true, false);
+      if (!e.dead && e.team !== u.team && Math.hypot(e.x - tx, e.y - ty) <= rad) {
+        if (e.immuneTimer <= 0) e.stunTimer = 2.0 * chargeMult;
+        dealDamage(u, e, 4000 * chargeMult, true, false);
       }
     }
   }
 }
 
-function triggerAssassinCircle(u) {
-  const rad = 10;
+function triggerAssassinCircle(u, chargeMult = 1.0) {
+  const rad = 10 * chargeMult;
   spawnEffect("ring", u.x, u.y, rad, 0, "#a855f7", 0.5);
   let cnt = 0;
   for (const e of units) {
     if (!e.dead && e.team !== u.team && Math.hypot(e.x - u.x, e.y - u.y) <= rad) {
       cnt++;
-      dealDamage(u, e, 4500, false, false);
+      dealDamage(u, e, 4500 * chargeMult, false, false);
     }
   }
   const addStacks = cnt * 3;
@@ -1041,50 +1105,49 @@ function triggerAssassinCircle(u) {
   if (u.isMe) spawnFloatText(u.x, u.y - 12, `被動 +${addStacks} 層 (${u.assassinStacks}/20)`, "#e879f9");
 }
 
-// 大招（蓄能滿 100% 施放）
-function useUlt(u = playerUnit) {
+// 大招（蓄能滿 100% 施放，支援按住蓄力強化）
+function useUlt(u = playerUnit, chargeMult = 1.0) {
   if (!u || u.dead || u.stunTimer > 0) return;
   if (u.ultCharge < 100) return;
   u.ultCharge = cheats.autoult ? 100 : 0;
 
   if (u.heroId === "warrior") {
-    // 解控 + 免控 15 秒 + 立即回復 25% 已損失血量
     u.stunTimer = 0;
-    u.immuneTimer = 15.0;
-    const heal = Math.round((u.maxHp - u.hp) * 0.25);
+    u.immuneTimer = 15.0 * chargeMult;
+    const heal = Math.min(u.maxHp - u.hp, Math.round((u.maxHp - u.hp) * 0.25 * chargeMult));
     u.hp = Math.min(u.maxHp, u.hp + heal);
-    spawnEffect("ring", u.x, u.y, 9, 0, "#facc15", 0.6);
-    spawnFloatText(u.x, u.y - 12, `免控15s +${heal}`, "#fde047");
+    spawnEffect("ring", u.x, u.y, 9 * chargeMult, 0, "#facc15", 0.6);
+    spawnFloatText(u.x, u.y - 12, `免控${(15*chargeMult).toFixed(1)}s +${heal}`, "#fde047");
   } else if (u.heroId === "assassin") {
-    // 減少 80% 冷卻 10 秒
-    u.ultBuffTimer = 10.0;
+    u.ultBuffTimer = 10.0 * chargeMult;
     u.s1Cd *= 0.2;
     u.s2Cd *= 0.2;
     u.empAtk = true;
-    spawnEffect("ring", u.x, u.y, 8, 0, "#c084fc", 0.5);
-    spawnFloatText(u.x, u.y - 12, "影殺狂潮：10s 減80%冷卻!", "#e879f9");
+    spawnEffect("ring", u.x, u.y, 8 * chargeMult, 0, "#c084fc", 0.5);
+    spawnFloatText(u.x, u.y - 12, `影殺狂潮：${(10*chargeMult).toFixed(1)}s 減80%冷卻!`, "#e879f9");
   } else if (u.heroId === "tank") {
-    // 眾防聯邦：大型團隊減傷守護領域
-    fields.push({ x: u.x, y: u.y, team: u.team, radius: 14, life: 8, type: "guard" });
-    spawnEffect("ring", u.x, u.y, 14, 0, "#3b82f6", 0.6);
+    const rad = 14 * chargeMult;
+    fields.push({ x: u.x, y: u.y, team: u.team, radius: rad, life: 8 * chargeMult, type: "guard" });
+    spawnEffect("ring", u.x, u.y, rad, 0, "#3b82f6", 0.6);
   } else if (u.heroId === "mage") {
-    // 5 秒站樁詠唱毀滅光柱
-    u.channelUltTimer = 5.0;
-    spawnFloatText(u.x, u.y - 12, "毀滅詠唱 (5秒)...", "#f472b6");
+    u.channelUltTimer = 5.0 / chargeMult;
+    spawnFloatText(u.x, u.y - 12, `毀滅詠唱 (${(5/chargeMult).toFixed(1)}秒)...`, "#f472b6");
   } else if (u.heroId === "archer") {
-    // 友軍助我：展開 6 人小隊
     const squadClasses = ["tank", "warrior", "warrior", "archer", "archer", "mage"];
     squadClasses.forEach((cls, idx) => {
       const su = createUnit(9000 + Math.random() * 9000, "精銳援軍", u.team, cls, false, true);
+      su.hp = Math.round(su.hp * chargeMult);
+      su.maxHp = su.hp;
+      su.atk = Math.round(su.atk * chargeMult);
       su.x = Math.max(10, Math.min(ARENA_LEN - 10, u.x + Math.cos(u.facing) * 8 + (idx - 2.5) * 3));
       su.y = Math.max(-ARENA_HALF_W + 8, Math.min(ARENA_HALF_W - 8, u.y + (idx - 2.5) * 3));
       units.push(su);
     });
-    spawnEffect("ring", u.x, u.y, 10, 0, "#10b981", 0.5);
+    spawnEffect("ring", u.x, u.y, 10 * chargeMult, 0, "#10b981", 0.5);
   } else if (u.heroId === "support") {
-    // 大招（不然呢）：半徑 25m 雙色領域
-    fields.push({ x: u.x, y: u.y, team: u.team, radius: 25, life: 10, type: "domain" });
-    spawnEffect("ring", u.x, u.y, 25, 0, "#38bdf8", 0.7);
+    const rad = Math.min(40, 25 * chargeMult);
+    fields.push({ x: u.x, y: u.y, team: u.team, radius: rad, life: 10 * chargeMult, type: "domain" });
+    spawnEffect("ring", u.x, u.y, rad, 0, "#38bdf8", 0.7);
   }
 }
 
@@ -1241,7 +1304,20 @@ function gameLoop(now) {
 function updateSimulation(dt) {
   matchTime = Math.max(0, matchTime - dt);
 
-  // 更新場地領域
+  // 更新玩家按住蓄力進度
+  if (playerUnit && (playerUnit.dead || playerUnit.stunTimer > 0)) {
+    Object.keys(holdState).forEach(k => cancelHold(k));
+  } else {
+    Object.keys(holdState).forEach(k => {
+      const st = holdState[k];
+      if (st.active) {
+        st.elapsed = Math.min(HOLD_MAX_SEC, st.elapsed + dt);
+        const pct = Math.round((st.elapsed / HOLD_MAX_SEC) * 100);
+        document.getElementById("chg-" + k).style.height = pct + "%";
+      }
+    });
+  }
+
   for (let i = fields.length - 1; i >= 0; i--) {
     const f = fields[i];
     f.life -= dt;
@@ -1261,13 +1337,11 @@ function updateSimulation(dt) {
     }
   }
 
-  // 更新哨兵
   for (let i = wards.length - 1; i >= 0; i--) {
     wards[i].life -= dt;
     if (wards[i].life <= 0) wards.splice(i, 1);
   }
 
-  // 更新所有單位
   for (let i = units.length - 1; i >= 0; i--) {
     const u = units[i];
     if (u.dead) {
@@ -1285,10 +1359,8 @@ function updateSimulation(dt) {
       continue;
     }
 
-    // 自然大招能量充能 (+2.5% / 秒)
     gainUltCharge(u, 2.5 * dt);
 
-    // 冷卻與狀態倒數
     u.s1Cd = Math.max(0, u.s1Cd - dt);
     u.s2Cd = Math.max(0, u.s2Cd - dt);
     u.stunTimer = Math.max(0, u.stunTimer - dt);
@@ -1300,12 +1372,10 @@ function updateSimulation(dt) {
     u.rangedImmuneTimer = Math.max(0, u.rangedImmuneTimer - dt);
     u.smashCd = Math.max(0, u.smashCd - dt);
 
-    // 刺客 1 技能延遲隱身與變體視窗
     if (u.heroId === "assassin" && u.s1WindowTimer > 0) {
       u.s1WindowTimer -= dt;
       if (u.s1WindowTimer <= 0) {
         if (u.s1Stage === 1) {
-          // 滿 1 秒進入隱身，開啟 1 秒內按第二次遁地或按 2 技突擊視窗
           u.s1Stage = 2;
           u.s1WindowTimer = 1.0;
           u.stealthTimer = 4.0;
@@ -1316,7 +1386,6 @@ function updateSimulation(dt) {
       }
     }
 
-    // 坦克抓取維持
     if (u.grabTargetId !== null) {
       u.grabTimer -= dt;
       const victim = units.find(x => x.id === u.grabTargetId);
@@ -1329,7 +1398,6 @@ function updateSimulation(dt) {
       }
     }
 
-    // 法師 5 秒詠唱大招
     if (u.channelUltTimer > 0) {
       if (u.stunTimer > 0) {
         u.channelUltTimer = 0;
@@ -1353,7 +1421,6 @@ function updateSimulation(dt) {
 
     if (u.stunTimer > 0 || u.grabbedBy) continue;
 
-    // 移動計算
     let vx = 0, vy = 0;
     if (u.isMe) {
       vx = joyVec.x;
@@ -1365,7 +1432,6 @@ function updateSimulation(dt) {
       const len = Math.hypot(vx, vy);
       if (len > 1) { vx /= len; vy /= len; }
     } else {
-      // AI 行為：朝戰線推進並交戰
       const enemy = findNearestEnemy(u, 36);
       if (enemy) {
         const d = Math.hypot(enemy.x - u.x, enemy.y - u.y);
@@ -1374,10 +1440,10 @@ function updateSimulation(dt) {
           vx = Math.cos(u.facing);
           vy = Math.sin(u.facing);
         } else {
-          if (Math.random() < 0.06) useAttack(u);
-          if (u.s1Cd <= 0 && Math.random() < 0.03) useSkill1(u);
-          if (u.s2Cd <= 0 && Math.random() < 0.03) useSkill2(u);
-          if (u.ultCharge >= 100 && Math.random() < 0.04) useUlt(u);
+          if (Math.random() < 0.06) useAttack(u, 1.0);
+          if (u.s1Cd <= 0 && Math.random() < 0.03) useSkill1(u, 1.0);
+          if (u.s2Cd <= 0 && Math.random() < 0.03) useSkill2(u, 1.0);
+          if (u.ultCharge >= 100 && Math.random() < 0.04) useUlt(u, 1.0);
         }
       } else {
         const goalX = u.team === "blue" ? ARENA_LEN - 40 : 40;
@@ -1397,7 +1463,6 @@ function updateSimulation(dt) {
       u.y = Math.max(-ARENA_HALF_W + 5, Math.min(ARENA_HALF_W - 5, u.y + vy * spd * dt));
       if (u.heroId === "archer") { u.standStillTime = 0; u.turretMode = false; }
     } else if (u.heroId === "archer") {
-      // 射手原地站立 5 秒架槍
       u.standStillTime += dt;
       if (u.standStillTime >= 5.0 && !u.turretMode) {
         u.turretMode = true;
@@ -1407,7 +1472,6 @@ function updateSimulation(dt) {
     u._domainSpeed = 1;
   }
 
-  // 更新彈道
   for (let i = projectiles.length - 1; i >= 0; i--) {
     const p = projectiles[i];
     p.x += p.vx * dt;
@@ -1424,7 +1488,6 @@ function updateSimulation(dt) {
     }
   }
 
-  // 更新特效與飄浮字
   for (let i = effects.length - 1; i >= 0; i--) {
     effects[i].life -= dt;
     if (effects[i].life <= 0) effects.splice(i, 1);
@@ -1437,24 +1500,21 @@ function updateSimulation(dt) {
 }
 
 // ==================== 渲染：往右上 ↗️ 斜 30° 戰場 ====================
-const SCALE = 7.5; // 1公尺 = 7.5像素
+const SCALE = 7.5;
 
 function renderBattlefield() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   if (!playerUnit) return;
 
   ctx.save();
-  // 相機跟隨玩家，並將整個戰場逆時針旋轉 30°（往右上 ↗️ 斜）
   ctx.translate(canvas.width / 2, canvas.height / 2);
   ctx.rotate(TILT_RAD);
   ctx.scale(SCALE, SCALE);
   ctx.translate(-playerUnit.x, -playerUnit.y);
 
-  // 1. 700m × 150m 單線走廊地板
   ctx.fillStyle = "#0f172a";
   ctx.fillRect(0, -ARENA_HALF_W, ARENA_LEN, ARENA_HALF_W * 2);
 
-  // 網格刻度（每 25m 一格）
   ctx.strokeStyle = "rgba(56, 189, 248, 0.08)";
   ctx.lineWidth = 0.3;
   for (let gx = 0; gx <= ARENA_LEN; gx += 25) {
@@ -1464,24 +1524,33 @@ function renderBattlefield() {
     ctx.beginPath(); ctx.moveTo(0, gy); ctx.lineTo(ARENA_LEN, gy); ctx.stroke();
   }
 
-  // 走廊上下發光邊界牆
   ctx.strokeStyle = "#38bdf8";
   ctx.lineWidth = 1.2;
   ctx.strokeRect(0, -ARENA_HALF_W, ARENA_LEN, ARENA_HALF_W * 2);
 
-  // 藍方（左下）與紅方（右上）出生基地色區
   ctx.fillStyle = "rgba(56, 189, 248, 0.14)";
   ctx.fillRect(0, -ARENA_HALF_W, 55, ARENA_HALF_W * 2);
   ctx.fillStyle = "rgba(244, 63, 94, 0.14)";
   ctx.fillRect(ARENA_LEN - 55, -ARENA_HALF_W, 55, ARENA_HALF_W * 2);
 
-  // 中央交戰線 (350m)
   ctx.strokeStyle = "rgba(250, 204, 21, 0.25)";
   ctx.setLineDash([4, 4]);
   ctx.beginPath(); ctx.moveTo(350, -ARENA_HALF_W); ctx.lineTo(350, ARENA_HALF_W); ctx.stroke();
   ctx.setLineDash([]);
 
-  // 2. 場地領域（輔助25m雙色領域 / 坦克眾防聯邦 / 治療圈）
+  // 玩家按住蓄力時在腳下顯示蓄力光環
+  const activeHoldKey = Object.keys(holdState).find(k => holdState[k].active);
+  if (activeHoldKey && !playerUnit.dead) {
+    const ratio = holdState[activeHoldKey].elapsed / HOLD_MAX_SEC;
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(playerUnit.x, playerUnit.y, 4.5 + ratio * 7, 0, Math.PI * 2 * ratio);
+    ctx.strokeStyle = "#fde047";
+    ctx.lineWidth = 0.8;
+    ctx.stroke();
+    ctx.restore();
+  }
+
   for (const f of fields) {
     ctx.beginPath();
     ctx.arc(f.x, f.y, f.radius, 0, Math.PI * 2);
@@ -1492,7 +1561,6 @@ function renderBattlefield() {
     ctx.stroke();
   }
 
-  // 3. 哨兵
   for (const w of wards) {
     ctx.beginPath();
     ctx.arc(w.x, w.y, w.radius, 0, Math.PI * 2);
@@ -1502,7 +1570,6 @@ function renderBattlefield() {
     ctx.beginPath(); ctx.arc(w.x, w.y, 1.4, 0, Math.PI * 2); ctx.fill();
   }
 
-  // 4. 單位與角色原型外觀
   for (const u of units) {
     if (u.dead) continue;
     if (u.stealthTimer > 0 && u.team !== playerUnit.team) continue;
@@ -1512,33 +1579,28 @@ function renderBattlefield() {
     if (u.stealthTimer > 0) ctx.globalAlpha = 0.4;
     if (u.burrowTimer > 0) ctx.globalAlpha = 0.25;
 
-    // 射手架槍光環
     if (u.heroId === "archer" && u.turretMode) {
       ctx.strokeStyle = "#34d399";
       ctx.lineWidth = 0.4;
       ctx.beginPath(); ctx.arc(0, 0, 4.2, 0, Math.PI * 2); ctx.stroke();
     }
 
-    // 戰士舉盾弧光
     if (u.shieldTimer > 0) {
       ctx.strokeStyle = "#facc15";
       ctx.lineWidth = 0.9;
       ctx.beginPath(); ctx.arc(0, 0, 3.6, u.facing - 1.1, u.facing + 1.1); ctx.stroke();
     }
 
-    // 角色本體（依職業區分幾何原型）
     const r = u.heroId === "tank" ? 3.2 : (u.isSummon ? 1.8 : 2.5);
     ctx.fillStyle = u.burrowTimer > 0 ? "#581c87" : u.color;
     ctx.beginPath();
     ctx.arc(0, 0, r, 0, Math.PI * 2);
     ctx.fill();
 
-    // 陣營外框（藍方天藍、紅方粉紅）
     ctx.lineWidth = u.isMe ? 0.65 : 0.45;
     ctx.strokeStyle = u.isMe ? "#fde047" : (u.team === "blue" ? "#38bdf8" : "#fb7185");
     ctx.stroke();
 
-    // 武器朝向指針
     ctx.strokeStyle = "#ffffff";
     ctx.lineWidth = 0.5;
     ctx.beginPath();
@@ -1546,7 +1608,6 @@ function renderBattlefield() {
     ctx.lineTo(Math.cos(u.facing) * (r + 1.5), Math.sin(u.facing) * (r + 1.5));
     ctx.stroke();
 
-    // 頭頂精準血條與具體血量數字（逆旋轉 30° 讓文字保持水平好讀）
     ctx.save();
     ctx.rotate(-TILT_RAD);
     const barW = 11;
@@ -1557,13 +1618,11 @@ function renderBattlefield() {
     ctx.fillStyle = u.team === "blue" ? "#38bdf8" : "#fb7185";
     ctx.fillRect(-barW / 2, -r - 3.6, barW * hpPct, barH);
 
-    // 精準血量數字標示
     ctx.font = "bold 1.55px sans-serif";
     ctx.textAlign = "center";
     ctx.fillStyle = "#ffffff";
     ctx.fillText(`${Math.ceil(u.hp).toLocaleString()} / ${u.maxHp.toLocaleString()}`, 0, -r - 4.3);
 
-    // 職業與玩家名（刺客顯示被動層數）
     const tag = u.heroId === "assassin" && u.assassinStacks > 0
       ? `${HEROES[u.heroId].name}[${u.assassinStacks}層]`
       : `${HEROES[u.heroId].name}·${u.name}`;
@@ -1575,13 +1634,11 @@ function renderBattlefield() {
     ctx.restore();
   }
 
-  // 5. 彈道
   for (const p of projectiles) {
     ctx.fillStyle = p.color;
     ctx.beginPath(); ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2); ctx.fill();
   }
 
-  // 6. 技能特效
   for (const ef of effects) {
     ctx.save();
     ctx.globalAlpha = Math.max(0, ef.life / ef.maxLife);
@@ -1600,7 +1657,6 @@ function renderBattlefield() {
     ctx.restore();
   }
 
-  // 7. 飄浮傷害與治療數字
   for (const ft of floatTexts) {
     ctx.save();
     ctx.translate(ft.x, ft.y);
@@ -1673,16 +1729,20 @@ function updateHUD() {
     cd2.style.display = "none";
   }
 
-  // 大招能量蓄能顯示
   const ultBtn = document.getElementById("btn-ult");
   const ultLbl = document.getElementById("lbl-ult");
   const pct = Math.floor(playerUnit.ultCharge);
-  ultLbl.textContent = pct >= 100 ? "就緒!" : `${pct}%`;
+  ultLbl.textContent = pct >= 100 ? "蓄力/放" : `${pct}%`;
   ultBtn.classList.toggle("ready", pct >= 100);
 
-  // 狀態提示條
   const banner = document.getElementById("status-banner");
   const chips = [];
+  const activeHoldKey = Object.keys(holdState).find(k => holdState[k].active);
+  if (activeHoldKey) {
+    const chgPct = Math.round((holdState[activeHoldKey].elapsed / HOLD_MAX_SEC) * 100);
+    const chgMult = (1 + holdState[activeHoldKey].elapsed / HOLD_MAX_SEC).toFixed(2);
+    chips.push(`蓄力中 ${chgPct}% (${chgMult}x) — 放開施放`);
+  }
   if (playerUnit.dead) chips.push(`復活倒數 ${playerUnit.respawnTimer.toFixed(1)}s`);
   if (playerUnit.s1Stage === 1) chips.push(`隱身準備 ${playerUnit.s1WindowTimer.toFixed(1)}s`);
   if (playerUnit.s1Stage === 2) chips.push(`變體視窗 ${playerUnit.s1WindowTimer.toFixed(1)}s (按1遁地 / 按2突擊)`);
